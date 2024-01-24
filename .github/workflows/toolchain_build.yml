@@ -43,15 +43,29 @@ jobs:
 
     name: ${{ matrix.display_name }}
     runs-on: ubuntu-20.04
+    container:
+      image: lowrisc/lowrisc-base-centos6:latest
     timeout-minutes: 360
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 12
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: check node
+        run: |
+          echo `which node`
 
       - name: Setup environment
         run: |
           echo ::group::Install dependencies
-          ./prepare-ubuntu-20.04.sh
+          ./prepare-centos6.sh
           ./install-crosstool-ng.sh
           echo ::endgroup::
 
